@@ -15,30 +15,33 @@ public struct ConstantsMacro: DeclarationMacro {
         guard arguments.count == 1
         else { throw ConstantsError.invalidArgumentCount }
         
-        guard let dictExpr = arguments.first?.expression.as(DictionaryExprSyntax.self)
+        guard let dictExpr = arguments.first?.expression.as(DictionaryExprSyntax.self),
+              let elementList = dictExpr.content.as(DictionaryElementListSyntax.self)
         else { throw ConstantsError.notADictionary }
         
         var structDeclarations: [DeclSyntax] = []
-        
-        guard let elementList = dictExpr.content.as(DictionaryElementListSyntax.self)
-        else { throw ConstantsError.invalidArgumentCount }
         
         for element in elementList {
             guard let key = element.key.as(StringLiteralExprSyntax.self)?.representedLiteralValue
             else { throw ConstantsError.unknown }
             
-            guard let dictionary = element.value.as(DictionaryExprSyntax.self)
-            else { throw ConstantsError.invalidFormat }
-            
-            let nestedStructure = try processStructContent(dictionary)
-            let finalStructure = """
+            let constantsStructure: String
+            if let dictionary = element.value.as(DictionaryExprSyntax.self) {
+                let nestedStructure = try processStructContent(dictionary)
+                constantsStructure = """
                     struct \(key) {
                     private init() {}
                     
                     \(nestedStructure)
                     }
                     """
-            structDeclarations.append("\(raw: finalStructure)")
+                structDeclarations.append("\(raw: constantsStructure)")
+            }
+            else {
+                let value = element.value.description.trimmingCharacters(in: .whitespacesAndNewlines)
+                constantsStructure = "static let \(key) = \(value)"
+                structDeclarations.append("\(raw: constantsStructure)")
+            }
         }
         
         return structDeclarations
@@ -55,9 +58,10 @@ public struct ConstantsMacro: DeclarationMacro {
             guard let key = element.key.as(StringLiteralExprSyntax.self)?.representedLiteralValue
             else { throw ConstantsError.unknown }
             
+            let constantsStructure: String
             if let dictionary = element.value.as(DictionaryExprSyntax.self) {
                 let nestedStructure = try processStructContent(dictionary)
-                let finalStructure = """
+                constantsStructure = """
                         
                         struct \(key) {
                         private init() {}
@@ -65,11 +69,12 @@ public struct ConstantsMacro: DeclarationMacro {
                         \(nestedStructure)
                         }
                         """
-                members.append(finalStructure)
+                members.append(constantsStructure)
             }
             else {
                 let value = element.value.description.trimmingCharacters(in: .whitespacesAndNewlines)
-                members.append("static let \(key) = \(value)")
+                constantsStructure = "static let \(key) = \(value)"
+                members.append(constantsStructure)
             }
         }
         
