@@ -1,15 +1,14 @@
 //
-//  File.swift
+//  ConstantsError.swift
 //  Constants
 //
 //  Created by Sourav Santra on 26/12/24.
 //
 
-// ConstantsError.swift
-// Error definitions for the `Constants` macro
 
 import Foundation
 
+/// Error definitions for the `Constants` macro
 enum ConstantsError: Error, CustomStringConvertible {
     case invalidArgumentCount
     case invalidFormat
