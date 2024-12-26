@@ -1,48 +1,44 @@
-import SwiftSyntax
-import SwiftSyntaxBuilder
-import SwiftSyntaxMacros
-import SwiftSyntaxMacrosTestSupport
 import XCTest
-
-// Macro implementations build for the host, so the corresponding module is not available when cross-compiling. Cross-compiled tests may still make use of the macro itself in end-to-end tests.
-#if canImport(ConstantsMacros)
-import ConstantsMacros
-
-let testMacros: [String: Macro.Type] = [
-    "stringify": StringifyMacro.self,
-]
-#endif
+@testable import Constants
+@testable import ConstantsMacros
 
 final class ConstantsTests: XCTestCase {
-    func testMacro() throws {
-        #if canImport(ConstantsMacros)
-        assertMacroExpansion(
-            """
-            #stringify(a + b)
-            """,
-            expandedSource: """
-            (a + b, "a + b")
-            """,
-            macros: testMacros
-        )
-        #else
-        throw XCTSkip("macros are only supported when running tests for the host platform")
-        #endif
+    // Test for a single constant: appName
+    func testConstants_SimpleKeyValue_ReturnsValueSuccessfully() throws {
+        struct SimpleConstants {
+            #Constants([
+                "appName": "MyApp"
+            ])
+        }
+        
+        XCTAssertEqual(SimpleConstants.appName, "MyApp")
     }
-
-    func testMacroWithStringLiteral() throws {
-        #if canImport(ConstantsMacros)
-        assertMacroExpansion(
-            #"""
-            #stringify("Hello, \(name)")
-            """#,
-            expandedSource: #"""
-            ("Hello, \(name)", #""Hello, \(name)""#)
-            """#,
-            macros: testMacros
-        )
-        #else
-        throw XCTSkip("macros are only supported when running tests for the host platform")
-        #endif
+    
+    // Test for a nested constant: NetworkConfig.baseURL
+    func testConstants_NestedDictionary_ReturnsValueSuccessfully() throws {
+        struct NestedConstants {
+            #Constants([
+                "NetworkConfig": [
+                    "baseURL": "https://api.example.com"
+                ]
+            ])
+        }
+        
+        XCTAssertEqual(NestedConstants.NetworkConfig.baseURL, "https://api.example.com")
+    }
+    
+    // Test for deeply nested constant: UI.Button.primary
+    func testConstants_DeeplyNestedDictionary_ReturnsValueSuccessfully() throws {
+        struct DeepNestedConstants {
+            #Constants([
+                "UI": [
+                    "Button": [
+                        "primary": "PrimaryButton"
+                    ]
+                ]
+            ])
+        }
+        
+        XCTAssertEqual(DeepNestedConstants.UI.Button.primary, "PrimaryButton")
     }
 }
