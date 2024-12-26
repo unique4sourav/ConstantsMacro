@@ -1,16 +1,16 @@
 import Constants
 
 #Constants([
-        "AppConstants": [
-            "appName": "MyApp",
-            "maxRetries": 3,
-            
-            "NetworkConfig": [
-                "baseURL": "https://api.example.com",
-                "timeout": 60
-            ]
+    "AppConstants": [
+        "appName": "MyApp",
+        "maxRetries": 3,
+        
+        "NetworkConfig": [
+            "baseURL": "https://api.example.com",
+            "timeout": 60
         ]
-    ])
+    ]
+])
 
 
 //#Constants([
