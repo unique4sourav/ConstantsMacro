@@ -27,6 +27,7 @@ Enums in Swift are excellent for unique, type-safe values but impose strict rule
 ## Installation
 
 ### Swift Package Manager
+#### 1. Using `Package.swift` File:
 Add the dependency in your `Package.swift` file:
 ```swift
 .package(url: "https://github.com/unique4sourav/StructBasedConstantsMacro.git", from: "1.0.0")
@@ -36,13 +37,34 @@ Then, include the module:
 import Constants
 ```
 
+#### 2. Using Xcode’s "Add Package Dependencies" Option:
+If you prefer to add the package through Xcode, follow these steps:
+
+1. Open your Xcode project.
+2. Navigate to the project navigator and select your project file at the top of the list.
+3. Go to the Package Dependencies tab (usually under the "Swift Packages" section).
+4. Click the Add Package button (`+`) at the bottom left.
+5. Enter the package URL:
+
+```swift
+https://github.com/unique4sourav/StructBasedConstantsMacro.git
+```
+6. Select the dependency rule:
+    - Up to Next Major Version with a version like 1.0.0.
+7. Click Add Package to confirm.
+   
+Xcode will fetch the package and link it to your project automatically. After the setup, you can start using the package by importing it:
+```swift
+import Constants
+```
+
 ---
 
 ## Usages
 
 ### Example 1: App-Wide Constants
 
-```
+```swift
 struct AppConstants {
     #Constants([
         "appName": "MyApp",
@@ -61,7 +83,7 @@ print("App Name: \(appName), Base URL: \(baseURL)")
 
 ### Example 2: Feature-Specific Constants
 
-```
+```swift
 struct AddTaskConstants {
     #Constants([
         "navigationTitle": "Add New Task",
@@ -81,6 +103,8 @@ let alertTitle = AddTaskConstants.Error.alertTitle
 print("Title: \(navigationTitle), Alert: \(alertTitle)")
 ```
 
+---
+
 ## Contributing
 We welcome contributions! Follow these steps:
 
@@ -88,6 +112,8 @@ We welcome contributions! Follow these steps:
 2. Create a feature branch.
 3. Make changes and write clear commit messages.
 4. Open a pull request.
+
+---
 
 ## Version
 See the [Changelog](CHANGELOG.md) for detailed version history.
