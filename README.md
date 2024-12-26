@@ -81,6 +81,21 @@ let baseURL = AppConstants.NetworkConfig.baseURL
 print("App Name: \(appName), Base URL: \(baseURL)")
 ```
 
+After expansion of the macro the end result will be below:
+```Swift
+struct AppConstants {
+    static let appName = "MyApp"
+    static let maxRetries = 3
+    struct NetworkConfig {
+        private init() {
+        }
+        
+        static let baseURL = "https://api.example.com"
+        static let timeout = 60
+    }
+}
+```
+
 ### Example 2: Feature-Specific Constants
 
 ```swift
@@ -101,6 +116,27 @@ struct AddTaskConstants {
 let navigationTitle = AddTaskConstants.navigationTitle
 let alertTitle = AddTaskConstants.Error.alertTitle
 print("Title: \(navigationTitle), Alert: \(alertTitle)")
+```
+After expansion of the macro the end result will be below:
+
+```swift
+struct AddTaskConstants {
+    static let navigationTitle = "Add New Task"
+    struct Error {
+        private init() {
+        }
+        
+        static let alertTitle = "Oops!"
+        static let buttonTitle = "Understood"
+    }
+    struct FieldTitle {
+        private init() {
+        }
+        
+        static let dueDate = "Due Date"
+        static let priority = "Priority"
+    }
+}
 ```
 
 ---
