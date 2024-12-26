@@ -18,10 +18,10 @@ let appName = AppConstants.appName
 let baseURL = AppConstants.NetworkConfig.baseURL
 
 
-
 struct AddTaskConstants {
     #Constants([
         "navigationTitle": "Add New Task",
+        "favouriteTaskIDs": Set([1, 2, 3]),
         "Error": [
             "alertTitle": "Oops!",
             "buttonTitle": "Understood"
