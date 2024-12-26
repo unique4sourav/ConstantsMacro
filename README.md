@@ -88,3 +88,6 @@ We welcome contributions! Follow these steps:
 2. Create a feature branch.
 3. Make changes and write clear commit messages.
 4. Open a pull request.
+
+## Version
+See the [Changelog](CHANGELOG.md) for detailed version history.
