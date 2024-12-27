@@ -15,15 +15,21 @@ public struct ConstantsMacro: DeclarationMacro {
         guard arguments.count == 1
         else { throw ConstantsError.invalidArgumentCount }
         
-        guard let dictExpr = arguments.first?.expression.as(DictionaryExprSyntax.self),
-              let elementList = dictExpr.content.as(DictionaryElementListSyntax.self)
+        guard let dictExpr = arguments.first?.expression.as(DictionaryExprSyntax.self)
         else { throw ConstantsError.notADictionary }
+        
+        guard let elementList = dictExpr.content.as(DictionaryElementListSyntax.self)
+        else { throw ConstantsError.emptyDictionary }
         
         var structDeclarations: [DeclSyntax] = []
         var addedTopLevelPrivateInitializer = false
         for element in elementList {
+            
             guard let key = element.key.as(StringLiteralExprSyntax.self)?.representedLiteralValue
             else { throw ConstantsError.unknown }
+            
+            guard !key.isEmpty
+            else { throw ConstantsError.emptyKey }
             
             let constantsStructure: String
             if let dictionary = element.value.as(DictionaryExprSyntax.self) {

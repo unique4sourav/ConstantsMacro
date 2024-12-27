@@ -48,3 +48,8 @@ struct AddTaskConstants {
 
 let navigationTitle = AddTaskConstants.navigationTitle
 let confirmationMessage = AddTaskConstants.ConfirmationDialougeMessage.discardSaving
+
+
+//struct AddTaskConstants2 {
+//    #Constants(["a":""])
+//}
