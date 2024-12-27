@@ -84,6 +84,9 @@ print("App Name: \(appName), Base URL: \(baseURL)")
 After expansion of the macro the end result will be below:
 ```Swift
 struct AppConstants {
+    private init() {
+    }
+    
     static let appName = "MyApp"
     static let maxRetries = 3
     struct NetworkConfig {
@@ -102,13 +105,27 @@ struct AppConstants {
 struct AddTaskConstants {
     #Constants([
         "navigationTitle": "Add New Task",
+        "favouriteTaskIDs": Set([1, 2, 3]),
         "Error": [
             "alertTitle": "Oops!",
             "buttonTitle": "Understood"
         ],
         "FieldTitle": [
             "dueDate": "Due Date",
-            "priority": "Priority"
+            "priority": "Priority",
+            "note": "Note",
+            "taskBackground": "Task Background"
+        ],
+        "FieldPrompt": [
+            "title": "Add a task...",
+            "note": "Here you can add a note about your task."
+        ],
+        "ToolBarItemTitle": [
+            "cancel": "Cancel",
+            "save": "Save"
+        ],
+        "ConfirmationDialougeMessage": [
+            "discardSaving": "Discard Saving"
         ]
     ])
 }
@@ -121,7 +138,11 @@ After expansion of the macro the end result will be below:
 
 ```swift
 struct AddTaskConstants {
+    private init() {
+    }
+    
     static let navigationTitle = "Add New Task"
+    static let favouriteTaskIDs = Set([1, 2, 3])
     struct Error {
         private init() {
         }
@@ -135,6 +156,28 @@ struct AddTaskConstants {
         
         static let dueDate = "Due Date"
         static let priority = "Priority"
+        static let note = "Note"
+        static let taskBackground = "Task Background"
+    }
+    struct FieldPrompt {
+        private init() {
+        }
+        
+        static let title = "Add a task..."
+        static let note = "Here you can add a note about your task."
+    }
+    struct ToolBarItemTitle {
+        private init() {
+        }
+        
+        static let cancel = "Cancel"
+        static let save = "Save"
+    }
+    struct ConfirmationDialougeMessage {
+        private init() {
+        }
+        
+        static let discardSaving = "Discard Saving"
     }
 }
 ```

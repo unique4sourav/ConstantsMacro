@@ -20,7 +20,7 @@ public struct ConstantsMacro: DeclarationMacro {
         else { throw ConstantsError.notADictionary }
         
         var structDeclarations: [DeclSyntax] = []
-        
+        var addedTopLevelPrivateInitializer = false
         for element in elementList {
             guard let key = element.key.as(StringLiteralExprSyntax.self)?.representedLiteralValue
             else { throw ConstantsError.unknown }
@@ -39,7 +39,17 @@ public struct ConstantsMacro: DeclarationMacro {
             }
             else {
                 let value = element.value.description.trimmingCharacters(in: .whitespacesAndNewlines)
-                constantsStructure = "static let \(key) = \(value)"
+                if !addedTopLevelPrivateInitializer {
+                    constantsStructure = """
+                    private init() {}
+                    
+                    static let \(key) = \(value)
+                    """
+                    addedTopLevelPrivateInitializer = true
+                }
+                else {
+                    constantsStructure = "static let \(key) = \(value)"
+                }
                 structDeclarations.append("\(raw: constantsStructure)")
             }
         }
